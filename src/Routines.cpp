@@ -280,12 +280,12 @@ bool MainDlg::OpenSaveDialog(
 /// <returns>Error code </returns>
 DWORD MainDlg::LoadImageFile( const std::wstring& path )
 {
-    std::shared_ptr<blackbone::pe::PEImage> img( new blackbone::pe::PEImage );
+    std::shared_ptr<InjectSettings> img( new InjectSettings );
     blackbone::pe::vecExports exports;
 
     // Check if image is already in the list
     if (std::find_if( _images.begin(), _images.end(),
-        [&path]( std::shared_ptr<blackbone::pe::PEImage>& img ) { return path == img->path(); } ) != _images.end())
+        [&path]( std::shared_ptr<InjectSettings>& img ) { return path == img->path(); } ) != _images.end())
     {
         Message::ShowInfo( _hwnd, L"Image '" + path + L"' is already in the list" );
         return ERROR_ALREADY_EXISTS;
@@ -334,7 +334,7 @@ DWORD MainDlg::LoadImageFile( const std::wstring& path )
 /// </summary>
 /// <param name="path">Loaded image</param>
 /// <param name="exports">Module exports</param>
-void MainDlg::AddToModuleList( std::shared_ptr<blackbone::pe::PEImage>& img )
+void MainDlg::AddToModuleList( std::shared_ptr<InjectSettings>& img )
 {
     wchar_t* platfom = nullptr;
 
@@ -347,5 +347,6 @@ void MainDlg::AddToModuleList( std::shared_ptr<blackbone::pe::PEImage>& img )
         platfom = L"Unknown";
 
     _images.emplace_back( img );
-    _modules.AddItem( blackbone::Utils::StripPath( img->path() ), 0, { platfom } );
+    int pos = _modules.AddItem( blackbone::Utils::StripPath( img->path() ), (LPARAM)img.get(), { platfom } );
+	ListView_SetCheckState(_modules.hwnd(), pos, 1);
 }

@@ -9,7 +9,9 @@
 #include <BlackBone/src/BlackBone/PE/PEImage.h>
 #include <BlackBone/src/BlackBone/Misc/Utils.h>
 
-typedef std::vector<std::shared_ptr<blackbone::pe::PEImage>> vecPEImages;
+class InjectSettings;
+
+typedef std::vector<std::shared_ptr<InjectSettings>> vecPEImages;
 typedef std::vector<blackbone::pe::vecExports> vecImageExports;
 
 enum MapMode
@@ -28,6 +30,12 @@ enum ProcMode
     Existing = 0,       // Inject into existing process
     NewProcess,         // Create and inject
     ManualLaunch,       // Await process start and inject
+};
+
+class InjectSettings : public blackbone::pe::PEImage
+{
+public:
+	bool enabled = true;
 };
 
 /// <summary>

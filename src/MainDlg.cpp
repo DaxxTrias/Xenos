@@ -14,6 +14,7 @@ MainDlg::MainDlg( MainDlg::StartAction action, const std::wstring& defConfig /*=
     _messages[WM_COMMAND]           = static_cast<Dialog::fnDlgProc>(&MainDlg::OnCommand);
     _messages[WM_CLOSE]             = static_cast<Dialog::fnDlgProc>(&MainDlg::OnClose);
     _messages[WM_DROPFILES]         = static_cast<Dialog::fnDlgProc>(&MainDlg::OnDragDrop);
+	_messages[WM_NOTIFY]			= static_cast<Dialog::fnDlgProc>(&MainDlg::OnModuleEdit);
 
     _events[IDC_EXECUTE]            = static_cast<Dialog::fnDlgProc>(&MainDlg::OnExecute);
     _events[IDC_SETTINGS]           = static_cast<Dialog::fnDlgProc>(&MainDlg::OnSettings);
@@ -59,7 +60,7 @@ INT_PTR MainDlg::OnInit( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
     _modules.AddColumn( L"Name", 150, 0 );
     _modules.AddColumn( L"Architecture", 100, 1 );
 
-    ListView_SetExtendedListViewStyle( _modules.hwnd(), LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER );
+    ListView_SetExtendedListViewStyle( _modules.hwnd(), LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER );
 
     // Set dialog title
     SetWindowTextW( _hwnd, blackbone::Utils::RandomANString().c_str() );
@@ -212,6 +213,27 @@ INT_PTR MainDlg::OnExistingProcess( HWND hDlg, UINT message, WPARAM wParam, LPAR
     _profileMgr.config().processMode = Existing;
     _procList.reset();
     UpdateInterface();
+    return TRUE;
+}
+
+INT_PTR MainDlg::OnModuleEdit( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
+{
+	if (LOWORD(wParam) == IDC_MODS)
+	{
+		LPNMLISTVIEW pnmv = (LPNMLISTVIEW)lParam;
+		if (pnmv->uChanged & LVIF_STATE && pnmv->uNewState & LVIS_STATEIMAGEMASK)
+		{
+			InjectSettings* mod = (InjectSettings*)_modules.itemParam(pnmv->iItem);
+
+			switch (pnmv->uNewState & LVIS_STATEIMAGEMASK)
+			{
+			case INDEXTOSTATEIMAGEMASK(2):
+				mod->enabled = true; break;
+			case INDEXTOSTATEIMAGEMASK(1):
+				mod->enabled = false; break;
+			}
+		}
+	}
     return TRUE;
 }
 

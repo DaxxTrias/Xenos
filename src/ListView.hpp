@@ -52,6 +52,17 @@ public:
         return buf;
     }
 
+	virtual LPARAM itemParam( int idx, int iSubItem = 0 )
+	{
+		LVITEM lvi = { 0 };
+		lvi.mask = LVIF_PARAM;
+		lvi.iItem = idx;
+		lvi.iSubItem = iSubItem;
+		ListView_GetItem(_hwnd, &lvi);
+
+		return lvi.lParam;
+	}
+
     virtual inline void RemoveItem( int idx ) { ListView_DeleteItem( _hwnd, idx ); }
 
     virtual inline int selection() const { return ListView_GetNextItem( _hwnd, -1, LVNI_SELECTED ); }

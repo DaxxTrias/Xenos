@@ -87,7 +87,7 @@ private:
     /// Add module to module list
     /// </summary>
     /// <param name="path">Loaded image</param>
-    void AddToModuleList( std::shared_ptr<blackbone::pe::PEImage>& img );
+    void AddToModuleList( std::shared_ptr<InjectSettings>& img );
 
     /// <summary>
     /// Invoke Open/Save file dialog
@@ -121,6 +121,7 @@ private:
     MSG_HANDLER( OnSelChange );
     MSG_HANDLER( OnDragDrop );
     MSG_HANDLER( OnExistingProcess );
+	MSG_HANDLER( OnModuleEdit );
 
     MSG_HANDLER( OnLoadProfile );
     MSG_HANDLER( OnSaveProfile );

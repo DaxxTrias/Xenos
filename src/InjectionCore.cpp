@@ -454,6 +454,9 @@ NTSTATUS InjectionCore::InjectMultiple( InjectContext* pContext )
     // Inject all images
     for (auto& img : pContext->images)
     {
+		if (!img->enabled)
+			continue;
+
         status |= InjectSingle( *pContext, *img );
         if (pContext->cfg.period)
             Sleep( pContext->cfg.period );
