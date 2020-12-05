@@ -18,6 +18,7 @@
 #define IDR_DRV81                       149
 #define IDR_DRIVER1                     150
 #define IDR_DRV10                       150
+#define IDD_IMAGE                       151
 #define IDC_EDIT_MAIN                   1000
 #define IDC_EXECUTE                     1001
 #define IDC_COMBO_PROC                  1002
@@ -59,10 +60,19 @@
 #define IDC_REMOVE_MOD                  1027
 #define IDC_CLEAR_MODS                  1028
 #define IDC_DELAY                       1029
+#define IDC_EDIT_MOD                    1029
 #define IDC_PERIOD                      1030
 #define IDC_CHECK1                      1031
 #define IDC_KRN_HANDLE                  1031
 #define IDC_SKIP                        1032
+#define IDC_IMAGE_CALLS                 1032
+#define IDC_IMAGE_EXPS                  1033
+#define IDC_CALL_ARG                    1034
+#define ID_IMAGE_CANCEL                 1035
+#define ID_IMAGE_OK                     1036
+#define IDC_ADD_CALL                    1037
+#define IDC_ADD_CALL2                   1038
+#define IDC_REMOVE_CALL                 1038
 #define ID_TOOLS_EJECTMODULES           32772
 #define ID_TOOLS_PROTECTSELF            32773
 #define ID_TOOLS_PROTECT                32774
@@ -77,9 +87,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        151
+#define _APS_NEXT_RESOURCE_VALUE        152
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1032
+#define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

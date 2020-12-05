@@ -22,7 +22,7 @@
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
 LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
-#pragma code_page(1251)
+#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -49,8 +49,9 @@ BEGIN
     GROUPBOX        "Images",IDC_STATIC,7,63,207,102
     CONTROL         "",IDC_MODS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,12,76,198,66
     PUSHBUTTON      "Add",IDC_ADD_MOD,12,148,50,14
-    PUSHBUTTON      "Remove",IDC_REMOVE_MOD,85,148,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE_MOD,110,148,50,14
     PUSHBUTTON      "Clear",IDC_CLEAR_MODS,160,148,50,14
+    PUSHBUTTON      "Edit",IDC_EDIT_MOD,62,148,48,14
 END
 
 IDD_MODULES DIALOGEX 0, 0, 265, 257
@@ -117,6 +118,24 @@ BEGIN
     CONTROL         "Inject indefinitely",IDC_INJ_EACH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,108,213,67,10
 END
 
+IDD_IMAGE DIALOGEX 0, 0, 247, 208
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Image injection settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",ID_IMAGE_OK,136,187,50,14
+    PUSHBUTTON      "Cancel",ID_IMAGE_CANCEL,190,187,50,14
+    CONTROL         "",IDC_IMAGE_CALLS,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,14,21,219,70
+    GROUPBOX        "Initialization routines",IDC_STATIC,7,7,233,107
+    GROUPBOX        "Add routine",IDC_STATIC,7,114,233,69
+    COMBOBOX        IDC_IMAGE_EXPS,63,128,170,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Init routine",IDC_STATIC,23,130,36,8
+    LTEXT           "Init arg",IDC_STATIC,35,149,24,8
+    EDITTEXT        IDC_CALL_ARG,63,146,170,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_ADD_CALL,183,164,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE_CALL,183,95,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -156,6 +175,14 @@ BEGIN
         RIGHTMARGIN, 398
         TOPMARGIN, 7
         BOTTOMMARGIN, 242
+    END
+
+    IDD_IMAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 240
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 201
     END
 END
 #endif    // APSTUDIO_INVOKED

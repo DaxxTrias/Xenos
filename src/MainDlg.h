@@ -4,6 +4,7 @@
 #include "DlgModules.h"
 #include "DlgWait.h"
 #include "DlgSettings.h"
+#include "DlgImage.h"
 #include "ProfileMgr.h"
 #include "ComboBox.hpp"
 #include "EditBox.hpp"
@@ -87,7 +88,7 @@ private:
     /// Add module to module list
     /// </summary>
     /// <param name="path">Loaded image</param>
-    void AddToModuleList( std::shared_ptr<InjectSettings>& img );
+    void AddToModuleList( std::shared_ptr<ImageContext>& img );
 
     /// <summary>
     /// Invoke Open/Save file dialog
@@ -121,7 +122,8 @@ private:
     MSG_HANDLER( OnSelChange );
     MSG_HANDLER( OnDragDrop );
     MSG_HANDLER( OnExistingProcess );
-	MSG_HANDLER( OnModuleEdit );
+	MSG_HANDLER( OnToggleImage );
+	MSG_HANDLER( OnEditImage );
 
     MSG_HANDLER( OnLoadProfile );
     MSG_HANDLER( OnSaveProfile );

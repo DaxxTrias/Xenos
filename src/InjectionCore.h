@@ -9,10 +9,12 @@
 #include <BlackBone/src/BlackBone/PE/PEImage.h>
 #include <BlackBone/src/BlackBone/Misc/Utils.h>
 
-class InjectSettings;
+class ImageContext;
+struct InitRoutineCall;
 
-typedef std::vector<std::shared_ptr<InjectSettings>> vecPEImages;
+typedef std::vector<std::shared_ptr<ImageContext>> vecPEImages;
 typedef std::vector<blackbone::pe::vecExports> vecImageExports;
+typedef std::vector<InitRoutineCall> vecRoutines;
 
 enum MapMode
 {
@@ -32,10 +34,17 @@ enum ProcMode
     ManualLaunch,       // Await process start and inject
 };
 
-class InjectSettings : public blackbone::pe::PEImage
+struct InitRoutineCall
+{
+	blackbone::pe::ExportData exp;
+	std::wstring args;
+};
+
+class ImageContext : public blackbone::pe::PEImage
 {
 public:
 	bool enabled = true;
+	vecRoutines initRoutines;
 };
 
 /// <summary>
@@ -101,7 +110,7 @@ private:
     /// </summary>
     /// <param name="context">Injection context</param>
     /// <returns>Error code</returns>
-    NTSTATUS InjectSingle( InjectContext& context, blackbone::pe::PEImage& img );
+    NTSTATUS InjectSingle( InjectContext& context, ImageContext& img );
 
     /// <summary>
     /// Default injection method

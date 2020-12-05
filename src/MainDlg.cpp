@@ -14,7 +14,7 @@ MainDlg::MainDlg( MainDlg::StartAction action, const std::wstring& defConfig /*=
     _messages[WM_COMMAND]           = static_cast<Dialog::fnDlgProc>(&MainDlg::OnCommand);
     _messages[WM_CLOSE]             = static_cast<Dialog::fnDlgProc>(&MainDlg::OnClose);
     _messages[WM_DROPFILES]         = static_cast<Dialog::fnDlgProc>(&MainDlg::OnDragDrop);
-	_messages[WM_NOTIFY]			= static_cast<Dialog::fnDlgProc>(&MainDlg::OnModuleEdit);
+	_messages[WM_NOTIFY]			= static_cast<Dialog::fnDlgProc>(&MainDlg::OnToggleImage);
 
     _events[IDC_EXECUTE]            = static_cast<Dialog::fnDlgProc>(&MainDlg::OnExecute);
     _events[IDC_SETTINGS]           = static_cast<Dialog::fnDlgProc>(&MainDlg::OnSettings);
@@ -23,6 +23,7 @@ MainDlg::MainDlg( MainDlg::StartAction action, const std::wstring& defConfig /*=
     _events[IDC_AUTO_PROC]          = static_cast<Dialog::fnDlgProc>(&MainDlg::OnSelectExecutable);
     _events[IDC_SELECT_PROC]        = static_cast<Dialog::fnDlgProc>(&MainDlg::OnSelectExecutable);
     _events[IDC_ADD_MOD]            = static_cast<Dialog::fnDlgProc>(&MainDlg::OnLoadImage);
+    _events[IDC_EDIT_MOD]           = static_cast<Dialog::fnDlgProc>(&MainDlg::OnEditImage);
     _events[IDC_REMOVE_MOD]         = static_cast<Dialog::fnDlgProc>(&MainDlg::OnRemoveImage);
     _events[IDC_CLEAR_MODS]         = static_cast<Dialog::fnDlgProc>(&MainDlg::OnClearImages);
     _events[CBN_DROPDOWN]           = static_cast<Dialog::fnDlgProc>(&MainDlg::OnDropDown);
@@ -166,6 +167,9 @@ INT_PTR MainDlg::OnRemoveImage( HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
 INT_PTR MainDlg::OnClearImages( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
 {
+	if (!Message::ShowQuestion(hDlg, L"Are you sure you want to clear the list?"))
+		return TRUE;
+
     _profileMgr.config().images.clear();
     _images.clear();
     _exports.clear();
@@ -216,25 +220,36 @@ INT_PTR MainDlg::OnExistingProcess( HWND hDlg, UINT message, WPARAM wParam, LPAR
     return TRUE;
 }
 
-INT_PTR MainDlg::OnModuleEdit( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
+INT_PTR MainDlg::OnToggleImage( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	if (LOWORD(wParam) == IDC_MODS)
+	if (LOWORD( wParam ) == IDC_MODS)
 	{
 		LPNMLISTVIEW pnmv = (LPNMLISTVIEW)lParam;
-		if (pnmv->uChanged & LVIF_STATE && pnmv->uNewState & LVIS_STATEIMAGEMASK)
+		if ((pnmv->uChanged & LVIF_STATE) && (pnmv->uNewState & LVIS_STATEIMAGEMASK))
 		{
-			InjectSettings* mod = (InjectSettings*)_modules.itemParam(pnmv->iItem);
+			ImageContext* mod = (ImageContext*)_modules.itemParam( pnmv->iItem );
 
 			switch (pnmv->uNewState & LVIS_STATEIMAGEMASK)
 			{
-			case INDEXTOSTATEIMAGEMASK(2):
+			case INDEXTOSTATEIMAGEMASK( 2 ):
 				mod->enabled = true; break;
-			case INDEXTOSTATEIMAGEMASK(1):
+			case INDEXTOSTATEIMAGEMASK( 1 ):
 				mod->enabled = false; break;
 			}
 		}
 	}
     return TRUE;
+}
+
+INT_PTR MainDlg::OnEditImage( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
+{
+	auto idx = _modules.selection();
+	if (idx < 0)
+		return TRUE;
+
+	ImageDlg dlg( *(ImageContext*)_modules.itemParam( idx ) );
+	dlg.RunModal(hDlg);
+	return TRUE;
 }
 
 INT_PTR MainDlg::OnSelectExecutable( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )

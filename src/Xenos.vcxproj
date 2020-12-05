@@ -200,6 +200,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DlgImage.cpp" />
     <ClCompile Include="ProfileMgr.cpp" />
     <ClCompile Include="DlgSettings.cpp" />
     <ClCompile Include="DlgWait.cpp" />
@@ -214,6 +215,7 @@
   <ItemGroup>
     <ClInclude Include="Button.hpp" />
     <ClInclude Include="ComboBox.hpp" />
+    <ClInclude Include="DlgImage.h" />
     <ClInclude Include="DriverExtract.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="ProfileMgr.h" />

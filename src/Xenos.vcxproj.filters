@@ -29,6 +29,9 @@
     <ClCompile Include="ProfileMgr.cpp">
       <Filter>Config</Filter>
     </ClCompile>
+    <ClCompile Include="DlgImage.cpp">
+      <Filter>Interface\ImageSettings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -112,6 +115,9 @@
     <ClInclude Include="DriverExtract.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="DlgImage.h">
+      <Filter>Interface\ImageSettings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -152,6 +158,9 @@
     </Filter>
     <Filter Include="Log">
       <UniqueIdentifier>{01cf98c8-a029-49f3-8002-2a821fdb7e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface\ImageSettings">
+      <UniqueIdentifier>{7d86caa0-73cb-453f-9949-d9999b4ff724}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

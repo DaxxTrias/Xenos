@@ -501,7 +501,7 @@ NTSTATUS InjectionCore::InjectMultiple( InjectContext* pContext )
 /// </summary>
 /// <param name="context">Injection context</param>
 /// <returns>Error code</returns>
-NTSTATUS InjectionCore::InjectSingle( InjectContext& context, blackbone::pe::PEImage& img )
+NTSTATUS InjectionCore::InjectSingle( InjectContext& context, ImageContext& img )
 {
     NTSTATUS status = ERROR_SUCCESS;
     blackbone::ThreadPtr pThread;
@@ -609,13 +609,22 @@ NTSTATUS InjectionCore::InjectSingle( InjectContext& context, blackbone::pe::PEI
     // Initialize routine
     if (NT_SUCCESS( status ) && context.cfg.injectMode < Kernel_Thread)
     {
-        status = CallInitRoutine( context, img, mod, exportRVA, pThread );
+		// MY TODO: Quit discarding the call status
+		if (exportRVA) // Global init routine setting
+			status = CallInitRoutine( context, img, mod, exportRVA, pThread );
+
+		for (auto& call : img.initRoutines)
+			status = CallInitRoutine( context, img, mod, call.exp.RVA, pThread );
     }
     else if (!NT_SUCCESS( status ))
     {
-        wchar_t errBuf[128] = { 0 };
-        wsprintfW( errBuf, L"Failed to inject image '%ls'.\nError code 0x%X", img.path().c_str(), status );
-        Message::ShowError( _hMainDlg, errBuf );
+		std::wstring wstr = L"Failed to inject image '" + img.path() + L";\n";
+
+        wchar_t errBuf[64] = { 0 };
+        wsprintfW( errBuf, L"Error code 0x%X", status );
+		wstr += errBuf;
+
+        Message::ShowError( _hMainDlg, wstr );
     }
 
     // Erase header
@@ -755,7 +764,7 @@ NTSTATUS InjectionCore::CallInitRoutine(
     )
 {
     // Call init for native image
-    if (!context.cfg.initRoutine.empty() && !img.pureIL() && context.cfg.injectMode < Kernel_Thread)
+    if (!img.pureIL() && context.cfg.injectMode < Kernel_Thread)
     {
         auto fnPtr = mod->baseAddress + exportRVA;
 
